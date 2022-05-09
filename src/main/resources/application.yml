@@ -1,1 +1,20 @@
+exporter:
+  kafka:
+    brokers: ${PHEE_IMPORTER_KAFKA}
+    topic: "zeebe-export"
+    reset: false
+    enabled: ${PHEE_EXPORTER_KAFKA_ENALED:false}
+  nats:
+    server: ${PHEE_EXPORTER_NATS_SERVER:localhost}
+    topic: "zeebe-export"
+    reset: false
+    enabled: ${PHEE_EXPORTER_NATS_ENALED:true}
+
+logging:
+  level:
+    root: ${FINERACT_CONSOLE_LOG:ERROR}
+
+server:
+  port: 8200
+
 

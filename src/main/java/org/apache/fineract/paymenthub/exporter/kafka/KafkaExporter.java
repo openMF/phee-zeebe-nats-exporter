@@ -5,23 +5,23 @@
  * Licensed under the Zeebe Community License 1.0. You may not use this file
  * except in compliance with the Zeebe Community License 1.0.
  */
-package hu.dpc.rt.kafkastreamer.exporter;
+package org.apache.fineract.paymenthub.exporter.kafka;
+
+import org.apache.fineract.paymenthub.exporter.config.ElasticSearchConfiguration;
+import org.slf4j.Logger;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 
 import io.zeebe.exporter.api.Exporter;
 import io.zeebe.exporter.api.context.Context;
 import io.zeebe.exporter.api.context.Controller;
 import io.zeebe.protocol.record.Record;
-import io.zeebe.protocol.record.RecordType;
-import io.zeebe.protocol.record.ValueType;
-import org.slf4j.Logger;
 
-import java.time.Duration;
-
+@ConditionalOnExpression("${exporter.kafka.enabled}")
 public class KafkaExporter implements Exporter {
     private Logger logger;
     private Controller controller;
 
-    private KafkaExporterConfiguration configuration;
+    private ElasticSearchConfiguration configuration;
 
     private KafkaExporterClient client;
 
@@ -31,10 +31,10 @@ public class KafkaExporter implements Exporter {
     public void configure(final Context context) {
         try {
             logger = context.getLogger();
-            configuration = context.getConfiguration().instantiate(KafkaExporterConfiguration.class);
+            configuration = context.getConfiguration().instantiate(ElasticSearchConfiguration.class);
             logger.debug("DPC Kafka exporter configured with {}", configuration);
 
-//        context.setFilter(new KafkaRecordFilter(configuration));
+            // context.setFilter(new KafkaRecordFilter(configuration));
         } catch (Exception e) {
             logger.error("Failed to configure KafkaExporter", e);
         }
@@ -46,7 +46,7 @@ public class KafkaExporter implements Exporter {
         this.controller = controller;
         client = createClient();
 
-        scheduleDelayedFlush();
+        // scheduleDelayedFlush();
         logger.info("DPC Kafka exporter opened");
     }
 
@@ -68,7 +68,7 @@ public class KafkaExporter implements Exporter {
     }
 
     @Override
-    public void export(final Record record) {
+    public void export(final Record<?> record) {
         client.index(record);
         lastPosition = record.getPosition();
 
@@ -81,6 +81,7 @@ public class KafkaExporter implements Exporter {
         return new KafkaExporterClient(configuration, logger);
     }
 
+    /*
     private void flushAndReschedule() {
         try {
             flush();
@@ -89,10 +90,13 @@ public class KafkaExporter implements Exporter {
         }
         scheduleDelayedFlush();
     }
+    */
 
+    /*
     private void scheduleDelayedFlush() {
         controller.scheduleTask(Duration.ofSeconds(configuration.bulk.delay), this::flushAndReschedule);
     }
+    */
 
     private void flush() {
         if (client.flush()) {
@@ -102,21 +106,21 @@ public class KafkaExporter implements Exporter {
         }
     }
 
-//    public static class KafkaRecordFilter implements Context.RecordFilter {
-//        private final KafkaExporterConfiguration configuration;
-//
-//        KafkaRecordFilter(final KafkaExporterConfiguration configuration) {
-//            this.configuration = configuration;
-//        }
-//
-//        @Override
-//        public boolean acceptType(final RecordType recordType) {
-//            return configuration.shouldIndexRecordType(recordType);
-//        }
-//
-//        @Override
-//        public boolean acceptValue(final ValueType valueType) {
-//            return configuration.shouldIndexValueType(valueType);
-//        }
-//    }
+    // public static class KafkaRecordFilter implements Context.RecordFilter {
+    // private final KafkaExporterConfiguration configuration;
+    //
+    // KafkaRecordFilter(final KafkaExporterConfiguration configuration) {
+    // this.configuration = configuration;
+    // }
+    //
+    // @Override
+    // public boolean acceptType(final RecordType recordType) {
+    // return configuration.shouldIndexRecordType(recordType);
+    // }
+    //
+    // @Override
+    // public boolean acceptValue(final ValueType valueType) {
+    // return configuration.shouldIndexValueType(valueType);
+    // }
+    // }
 }

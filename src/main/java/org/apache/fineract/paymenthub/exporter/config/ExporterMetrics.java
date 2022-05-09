@@ -5,14 +5,16 @@
  * Licensed under the Zeebe Community License 1.0. You may not use this file
  * except in compliance with the Zeebe Community License 1.0.
  */
-package hu.dpc.rt.kafkastreamer.exporter;
+package org.apache.fineract.paymenthub.exporter.config;
 
 import io.prometheus.client.Histogram;
+
+import org.apache.fineract.paymenthub.exporter.kafka.KafkaExporterClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class KafkaExporterMetrics {
-    private static Logger logger = LoggerFactory.getLogger(KafkaExporterMetrics.class);
+public class ExporterMetrics {
+    private static Logger logger = LoggerFactory.getLogger(ExporterMetrics.class);
 
     private static final Histogram FLUSH_DURATION =
             Histogram.build()
@@ -33,7 +35,7 @@ public class KafkaExporterMetrics {
 
     private final String partitionIdLabel;
 
-    public KafkaExporterMetrics(final int partitionId) {
+    public ExporterMetrics(final int partitionId) {
         this.partitionIdLabel = String.valueOf(partitionId);
     }
 

@@ -1,4 +1,4 @@
-package hu.dpc.rt.kafkastreamer.exporter;
+package org.apache.fineract.paymenthub.exporter;
 
 import io.zeebe.exporter.api.Exporter;
 import io.zeebe.exporter.api.context.Context;
@@ -16,7 +16,8 @@ public class NoOpExporter implements Exporter {
     }
 
     @Override
-    public void export(Record record) {
+    public void export(Record<?> record) {
+        logger.debug("Exporting {}", record.toJson());
         // empty
     }
 

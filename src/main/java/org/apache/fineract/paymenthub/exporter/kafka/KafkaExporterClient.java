@@ -5,9 +5,12 @@
  * Licensed under the Zeebe Community License 1.0. You may not use this file
  * except in compliance with the Zeebe Community License 1.0.
  */
-package hu.dpc.rt.kafkastreamer.exporter;
+package org.apache.fineract.paymenthub.exporter.kafka;
 
 import io.zeebe.protocol.record.Record;
+
+import org.apache.fineract.paymenthub.exporter.config.ElasticSearchConfiguration;
+import org.apache.fineract.paymenthub.exporter.config.ExporterMetrics;
 import org.apache.kafka.clients.admin.AdminClient;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.producer.KafkaProducer;
@@ -24,16 +27,16 @@ import java.util.concurrent.atomic.AtomicLong;
 
 public class KafkaExporterClient {
     private final Logger logger;
-    private final KafkaExporterConfiguration configuration;
-    private KafkaExporterMetrics metrics;
+    private final ElasticSearchConfiguration configuration;
+    private ExporterMetrics metrics;
     private AtomicLong sentToKafka = new AtomicLong(0);
     private boolean initialized;
 
     // json content for now
     private KafkaProducer<String, String> producer;
-    public static final String kafkaTopic = "zeebe-export";
+    public static final String zeebeExportTopic = "zeebe-export";
 
-    public KafkaExporterClient(final KafkaExporterConfiguration configuration, final Logger logger) {
+    public KafkaExporterClient(final ElasticSearchConfiguration configuration, final Logger logger) {
         this.configuration = configuration;
         this.logger = logger;
         Map<String, Object> kafkaProperties = new HashMap<>();
@@ -47,9 +50,9 @@ public class KafkaExporterClient {
 
         try {
             AdminClient adminClient = AdminClient.create(kafkaProperties);
-            adminClient.createTopics(Arrays.asList(new NewTopic(kafkaTopic, 1, (short) 1)));
+            adminClient.createTopics(Arrays.asList(new NewTopic(zeebeExportTopic, 1, (short) 1)));
             adminClient.close();
-            logger.info("created kafka topic {} successfully", kafkaTopic);
+            logger.info("created kafka topic {} successfully", zeebeExportTopic);
         } catch (Exception e) {
             logger.warn("Failed to create Kafka topic (it exists already?)", e);
         }
@@ -68,7 +71,7 @@ public class KafkaExporterClient {
     public void index(final Record<?> record) {
         if (metrics == null && !initialized) {
             try {
-                metrics = new KafkaExporterMetrics(record.getPartitionId());
+                metrics = new ExporterMetrics(record.getPartitionId());
             } catch (Exception e) {
                 logger.warn("## failed to initialize metrics, continuing without it");
             }
@@ -79,7 +82,7 @@ public class KafkaExporterClient {
             logger.trace("sending record to kafka: {}", record.toJson());
             sentToKafka.incrementAndGet();
             metrics.recordBulkSize(1);
-            producer.send(new ProducerRecord<>(kafkaTopic, idFor(record), record.toJson()));
+            producer.send(new ProducerRecord<>(zeebeExportTopic, idFor(record), record.toJson()));
         } else {
             logger.trace("skipping record: {}", record.toString());
         }

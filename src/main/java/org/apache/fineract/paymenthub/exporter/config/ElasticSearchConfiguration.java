@@ -5,13 +5,13 @@
  * Licensed under the Zeebe Community License 1.0. You may not use this file
  * except in compliance with the Zeebe Community License 1.0.
  */
-package hu.dpc.rt.kafkastreamer.exporter;
+package org.apache.fineract.paymenthub.exporter.config;
 
 import io.zeebe.protocol.record.Record;
 import io.zeebe.protocol.record.RecordType;
 import io.zeebe.protocol.record.ValueType;
 
-public class KafkaExporterConfiguration {
+public class ElasticSearchConfiguration {
   // elasticsearch http url - not used
   public String url = "not used";
 
@@ -59,12 +59,12 @@ public class KafkaExporterConfiguration {
         return index.variable;
       case VARIABLE_DOCUMENT:
         return index.variableDocument;
-      case WORKFLOW_INSTANCE:
-        return index.workflowInstance;
-      case WORKFLOW_INSTANCE_CREATION:
-        return index.workflowInstanceCreation;
-      case WORKFLOW_INSTANCE_SUBSCRIPTION:
-        return index.workflowInstanceSubscription;
+      // case WORKFLOW_INSTANCE:
+      //  return index.workflowInstance;
+      // case WORKFLOW_INSTANCE_CREATION:
+      //  return index.workflowInstanceCreation;
+      // case WORKFLOW_INSTANCE_SUBSCRIPTION:
+      //  return index.workflowInstanceSubscription;
       default:
         return false;
     }

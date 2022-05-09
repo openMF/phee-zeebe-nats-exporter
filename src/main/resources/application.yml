@@ -1,12 +1,12 @@
 exporter:
   kafka:
     brokers: ${PHEE_IMPORTER_KAFKA}
-    topic: "zeebe-export"
+    topic: ${PHEE_EXPORTER_KAFKA_TOPIC:zeebe-export}
     reset: false
     enabled: ${PHEE_EXPORTER_KAFKA_ENALED:false}
   nats:
     server: ${PHEE_EXPORTER_NATS_SERVER:localhost}
-    topic: "zeebe-export"
+    topic: ${PHEE_EXPORTER_NATS_TOPIC:zeebe-export}
     reset: false
     enabled: ${PHEE_EXPORTER_NATS_ENALED:true}
 

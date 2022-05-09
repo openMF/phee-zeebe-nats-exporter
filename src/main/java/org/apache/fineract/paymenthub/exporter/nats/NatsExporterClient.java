@@ -3,6 +3,7 @@ package org.apache.fineract.paymenthub.exporter.nats;
 import org.apache.fineract.paymenthub.exporter.config.ElasticSearchConfiguration;
 import org.apache.fineract.paymenthub.exporter.config.ExporterMetrics;
 import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
 
 import io.zeebe.protocol.record.Record;
 import io.nats.client.Connection;
@@ -20,7 +21,8 @@ public class NatsExporterClient {
     private boolean initialized;
     private Connection natsConnection;
 
-    public static final String zeebeExportTopic = "zeebe-export";
+    @Value("${exporter.nats.topic}")
+    private String zeebeExportTopic;
 
     public NatsExporterClient(final ElasticSearchConfiguration configuration, final Logger logger,
         Connection natsConnection) {

@@ -19,8 +19,8 @@ public class NatsConfig {
 
     @Bean
     public Connection natsConnection() throws IOException, InterruptedException {
-        Options o = new Options.Builder().server(natsServer).maxReconnects(-1).build();
-        Connection nc = Nats.connect(o);
+        Options options = new Options.Builder().server(natsServer).maxReconnects(-1).build();
+        Connection nc = Nats.connect(options);
 
         return nc;
     }

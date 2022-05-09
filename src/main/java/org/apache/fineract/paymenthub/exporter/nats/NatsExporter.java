@@ -26,7 +26,7 @@ public class NatsExporter implements Exporter {
 
     private long lastPosition = -1;
 
-    @Value("${nats.topic.request-topic}")
+    @Value("${exporter.nats.topic}")
     private String natsTopic;
 
     @Override

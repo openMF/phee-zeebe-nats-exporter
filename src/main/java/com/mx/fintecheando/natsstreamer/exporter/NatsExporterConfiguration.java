@@ -21,7 +21,7 @@ public class NatsExporterConfiguration {
 
   @Override
   public String toString() {
-    return "KafkaExporterConfiguration{"
+    return "NatsExporterConfiguration{"
         + "url='"
         + url
         + '\''

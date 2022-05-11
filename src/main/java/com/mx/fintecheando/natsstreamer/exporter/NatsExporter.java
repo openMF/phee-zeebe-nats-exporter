@@ -31,10 +31,8 @@ public class NatsExporter implements Exporter {
             logger = context.getLogger();
             configuration = context.getConfiguration().instantiate(NatsExporterConfiguration.class);
             logger.debug("Fintecheando Nats exporter configured with {}", configuration);
-
-//        context.setFilter(new KafkaRecordFilter(configuration));
         } catch (Exception e) {
-            logger.error("Failed to configure KafkaExporter", e);
+            logger.error("Failed to configure NatsExporter", e);
         }
     }
 
@@ -100,21 +98,4 @@ public class NatsExporter implements Exporter {
         }
     }
 
-//    public static class KafkaRecordFilter implements Context.RecordFilter {
-//        private final KafkaExporterConfiguration configuration;
-//
-//        KafkaRecordFilter(final KafkaExporterConfiguration configuration) {
-//            this.configuration = configuration;
-//        }
-//
-//        @Override
-//        public boolean acceptType(final RecordType recordType) {
-//            return configuration.shouldIndexRecordType(recordType);
-//        }
-//
-//        @Override
-//        public boolean acceptValue(final ValueType valueType) {
-//            return configuration.shouldIndexValueType(valueType);
-//        }
-//    }
 }

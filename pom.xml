@@ -3,48 +3,51 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.apache.fineract.paymenthub</groupId>
+    <groupId>hu.dpc.phee</groupId>
     <artifactId>exporter</artifactId>
     <version>1.0.0-SNAPSHOT</version>
 
     <properties>
         <java.version>17</java.version>
-        <maven.compiler.target>11</maven.compiler.target>
-        <maven.compiler.source>11</maven.compiler.source>
-
+        <maven.compiler.target>17</maven.compiler.target>
+        <maven.compiler.source>17</maven.compiler.source>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <maven-shade-plugin.version>3.2.2</maven-shade-plugin.version>
-
-        <zeebe.version>0.26.1</zeebe.version>
-        <kafka.version>3.1.0</kafka.version>
-        <elasticsearch.version>7.6.0</elasticsearch.version>
-        <json.version>20190722</json.version>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>        
     </properties>
 
     <dependencies>
         <dependency>
-            <groupId>org.apache.kafka</groupId>
-            <artifactId>kafka-clients</artifactId>
-            <version>${kafka.version}</version>
-            <scope>provided</scope>
+            <groupId>io.nats</groupId>
+            <artifactId>jnats</artifactId>
+            <version>2.15.0</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
-            <groupId>io.zeebe</groupId>
+            <groupId>io.camunda</groupId>
             <artifactId>zeebe-exporter-api</artifactId>
-            <version>${zeebe.version}</version>
+            <version>8.0.2</version>
             <scope>provided</scope>
-        </dependency>
+        </dependency>        
         <dependency>
-            <groupId>io.zeebe</groupId>
+            <groupId>io.camunda</groupId>
             <artifactId>zeebe-elasticsearch-exporter</artifactId>
-            <version>${zeebe.version}</version>
-            <scope>provided</scope>
+            <version>8.0.2</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
-            <version>${json.version}</version>
+            <version>20220320</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
@@ -54,7 +57,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>${maven-shade-plugin.version}</version>
+                <version>3.2.4</version>
                 <executions>
                     <execution>
                         <phase>package</phase>
@@ -67,14 +70,4 @@
         </plugins>
     </build>
 
-    <distributionManagement>
-        <repository>
-            <id>ph-ee-release</id>
-            <url>http://jenkins.mifos.io:8081/repository/ph-ee-release/</url>
-        </repository>
-        <snapshotRepository>
-            <id>ph-ee-snapshot</id>
-            <url>http://jenkins.mifos.io:8081/repository/ph-ee-snapshot/</url>
-        </snapshotRepository>
-    </distributionManagement>
 </project>

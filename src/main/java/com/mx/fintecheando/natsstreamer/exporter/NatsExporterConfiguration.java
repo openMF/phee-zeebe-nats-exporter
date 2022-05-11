@@ -12,7 +12,7 @@ import io.camunda.zeebe.protocol.record.RecordType;
 import io.camunda.zeebe.protocol.record.ValueType;
 
 public class NatsExporterConfiguration {
-  // elasticsearch http url - not used
+  // nats url - not used
   public String url = "not used";
 
   public final IndexConfiguration index = new IndexConfiguration();

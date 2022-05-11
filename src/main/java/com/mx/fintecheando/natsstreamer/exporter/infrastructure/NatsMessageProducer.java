@@ -6,40 +6,41 @@ package com.mx.fintecheando.natsstreamer.exporter.infrastructure;
 
 import io.nats.client.Connection;
 import io.nats.client.Nats;
-//import io.nats.streaming.StreamingConnectionFactory;
-import com.mx.fintecheando.natsstreamer.exporter.model.MessageProducer;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.Map;
+import io.nats.client.Message;
+import io.nats.client.impl.Headers;
+import io.nats.client.impl.NatsMessage;
        
-public class NatsMessageProducer implements MessageProducer {
+public class NatsMessageProducer {
 
     private final String natsUrl;
-    //private final String clusterId;
-    //private final String clientId;
 
     private Connection connection;
 
     public NatsMessageProducer(String natsUrl) {
         this.natsUrl = natsUrl;
-        //this.clusterId = clusterId;
-        //this.clientId = clientId;
     }
     
     public NatsMessageProducer(Map<String, Object> natsProperties) {
         this.natsUrl = natsProperties.get("natsUrl").toString();
-        //this.clusterId = natsProperties.get("clusterId").toString();
-        //this.clientId = natsProperties.get("clientId").toString();
     }
 
     public void start() throws Exception {        
         connection = Nats.connect(natsUrl);
     }
-
-    @Override
-    public void send(String topicName, String message) {
+    
+    public void send(String topicName, String idRecord, String message) {
         try {
-            connection.publish(topicName, message.getBytes(StandardCharsets.UTF_8));
+            Headers headers = new Headers();
+            headers.add("idRecord", idRecord);
+            Message msg = NatsMessage.builder()
+                            .data(message.getBytes(StandardCharsets.UTF_8))
+                            .subject(topicName)
+                            .headers(headers)
+                            .build();
+            connection.publish(msg);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

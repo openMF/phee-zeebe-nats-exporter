@@ -73,7 +73,7 @@ public class NatsExporterClient {
             logger.trace("sending record to Nats: {}", record.toJson());
             sentToNats.incrementAndGet();
             metrics.recordBulkSize(1);
-            producer.send(NATS_TOPIC, record.toJson());
+            producer.send(NATS_TOPIC, idFor(record), record.toJson());
         } else {
             logger.trace("skipping record: {}", record.toString());
         }

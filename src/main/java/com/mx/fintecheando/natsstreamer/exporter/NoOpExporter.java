@@ -27,6 +27,6 @@ public class NoOpExporter implements Exporter {
 
     @Override
     public void export(Record<?> record) {
-        // empty
+        logger.info("## no-op exporter record");
     }
 }

@@ -69,14 +69,14 @@ public class NatsExporterClient {
             initialized = true;
         }
 
-        if (configuration.shouldIndexRecord(record)) {
+        //if (configuration.shouldIndexRecord(record)) {
             logger.trace("sending record to Nats: {}", record.toJson());
             sentToNats.incrementAndGet();
             metrics.recordBulkSize(1);
             producer.send(NATS_TOPIC, idFor(record), record.toJson());
-        } else {
+        /*} else {
             logger.trace("skipping record: {}", record.toString());
-        }
+        }*/
     }
 
     /**

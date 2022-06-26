@@ -252,11 +252,11 @@ zeebe:
       # ioThreadCount: 2
 
     exporters:
-      kafkastreamer:
-        className: hu.dpc.rt.kafkastreamer.exporter.KafkaExporter
+      natsstreamer:
+        className: com.mx.fintecheando.natsstreamer.exporter.NatsExporterClient
         jarPath: /usr/local/zeebe/lib/exporter-1.0.0-SNAPSHOT.jar
         args:
-          url: http://kafka:9092/
+          url: nats://messaging-server:4222
 
       # Configure exporters below
       #

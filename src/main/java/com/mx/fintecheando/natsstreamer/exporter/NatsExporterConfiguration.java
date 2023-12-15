@@ -5,14 +5,14 @@
  * Licensed under the Zeebe Community License 1.0. You may not use this file
  * except in compliance with the Zeebe Community License 1.0.
  */
-package org.apache.fineract.paymenthub.exporter.config;
+package com.mx.fintecheando.natsstreamer.exporter;
 
-import io.zeebe.protocol.record.Record;
-import io.zeebe.protocol.record.RecordType;
-import io.zeebe.protocol.record.ValueType;
+import io.camunda.zeebe.protocol.record.Record;
+import io.camunda.zeebe.protocol.record.RecordType;
+import io.camunda.zeebe.protocol.record.ValueType;
 
-public class ElasticSearchConfiguration {
-  // elasticsearch http url - not used
+public class NatsExporterConfiguration {
+  // nats url - not used
   public String url = "not used";
 
   public final IndexConfiguration index = new IndexConfiguration();
@@ -21,7 +21,7 @@ public class ElasticSearchConfiguration {
 
   @Override
   public String toString() {
-    return "KafkaExporterConfiguration{"
+    return "NatsExporterConfiguration{"
         + "url='"
         + url
         + '\''
@@ -59,13 +59,7 @@ public class ElasticSearchConfiguration {
         return index.variable;
       case VARIABLE_DOCUMENT:
         return index.variableDocument;
-      // case WORKFLOW_INSTANCE:
-      //  return index.workflowInstance;
-      // case WORKFLOW_INSTANCE_CREATION:
-      //  return index.workflowInstanceCreation;
-      // case WORKFLOW_INSTANCE_SUBSCRIPTION:
-      //  return index.workflowInstanceSubscription;
-      default:
+        default:
         return false;
     }
   }

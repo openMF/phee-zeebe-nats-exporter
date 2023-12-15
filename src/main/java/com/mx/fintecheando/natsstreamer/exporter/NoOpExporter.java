@@ -1,24 +1,18 @@
-package org.apache.fineract.paymenthub.exporter;
+package com.mx.fintecheando.natsstreamer.exporter;
 
-import io.zeebe.exporter.api.Exporter;
-import io.zeebe.exporter.api.context.Context;
-import io.zeebe.exporter.api.context.Controller;
-import io.zeebe.protocol.record.Record;
+import io.camunda.zeebe.exporter.api.Exporter;
+import io.camunda.zeebe.exporter.api.context.Context;
+import io.camunda.zeebe.exporter.api.context.Controller;
+import io.camunda.zeebe.protocol.record.Record;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class NoOpExporter implements Exporter {
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Override
     public void configure(Context context) throws Exception {
         logger.info("## no-op exporter configured");
-    }
-
-    @Override
-    public void export(Record<?> record) {
-        logger.debug("Exporting {}", record.toJson());
-        // empty
     }
 
     @Override
@@ -29,5 +23,10 @@ public class NoOpExporter implements Exporter {
     @Override
     public void close() {
         logger.info("## no-op exporter closed");
+    }
+
+    @Override
+    public void export(Record<?> record) {
+        logger.info("## no-op exporter record");
     }
 }

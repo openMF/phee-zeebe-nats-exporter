@@ -5,20 +5,18 @@
  * Licensed under the Zeebe Community License 1.0. You may not use this file
  * except in compliance with the Zeebe Community License 1.0.
  */
-package org.apache.fineract.paymenthub.exporter.config;
+package com.mx.fintecheando.natsstreamer.exporter;
 
 import io.prometheus.client.Histogram;
-
-import org.apache.fineract.paymenthub.exporter.kafka.KafkaExporterClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ExporterMetrics {
-    private static Logger logger = LoggerFactory.getLogger(ExporterMetrics.class);
+public class NatsExporterMetrics {
+    private static final Logger logger = LoggerFactory.getLogger(NatsExporterMetrics.class);
 
     private static final Histogram FLUSH_DURATION =
             Histogram.build()
-                    .namespace("phee_exporter_" + KafkaExporterClient.buildKafkaClientId(logger).replaceAll("-", "_"))
+                    .namespace("phee_exporter_" + NatsExporterClient.buildNatsClientId(logger).replaceAll("-", "_"))
                     .name("flush_duration_seconds")
                     .help("Flush duration of bulk exporters in seconds")
                     .labelNames("partition")
@@ -26,7 +24,7 @@ public class ExporterMetrics {
 
     private static final Histogram BULK_SIZE =
             Histogram.build()
-                    .namespace("phee_exporter_" + KafkaExporterClient.buildKafkaClientId(logger).replaceAll("-", "_"))
+                    .namespace("phee_exporter_" + NatsExporterClient.buildNatsClientId(logger).replaceAll("-", "_"))
                     .name("bulk_size")
                     .help("Exporter bulk size")
                     .buckets(10, 100, 1_000, 10_000, 100_000)
@@ -35,7 +33,7 @@ public class ExporterMetrics {
 
     private final String partitionIdLabel;
 
-    public ExporterMetrics(final int partitionId) {
+    public NatsExporterMetrics(final int partitionId) {
         this.partitionIdLabel = String.valueOf(partitionId);
     }
 
